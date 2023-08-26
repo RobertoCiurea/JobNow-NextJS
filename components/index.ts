@@ -5,5 +5,15 @@ import Footer from "./Footer.tsx";
 import Logo from "./Logo.tsx";
 import Main from "./Main.tsx";
 import SearchBar from "./SearchBar.tsx";
+import CustomJobAd from "./CustomJobAd.tsx";
 
-export { Hero, CustomButton, Navbar, Footer, Logo, Main, SearchBar };
+export {
+  Hero,
+  CustomButton,
+  Navbar,
+  Footer,
+  Logo,
+  Main,
+  SearchBar,
+  CustomJobAd,
+};
