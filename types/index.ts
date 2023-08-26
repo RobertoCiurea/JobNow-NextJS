@@ -19,3 +19,11 @@ export interface SearchBarProps {
   inputStyles?: string;
   imageStyles?: string;
 }
+
+export interface CustomJobAdProps {
+  createdAt: string;
+  title: string;
+  tags: string[];
+  salary: number;
+  location: string;
+}
