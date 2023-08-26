@@ -45,7 +45,7 @@ const Main = () => {
         </h1>
         <div className="flex gap-5 items-center">
           <h1 className="font Rubik text-xl  font-semibold">Sort</h1>
-          <select className="text-lg lg:text-xl font-Rubik cursor-pointer border-2 border-primary rounded-full focus:outline-none  p-2 ">
+          <select className="text-lg lg:text-xl font-Rubik cursor-pointer border-b-2 border-primary focus:border-2 focus:border-primary focus:rounded-full focus:outline-none   ">
             <option value="0" className="cursor-poiunter">
               Recommended
             </option>
