@@ -22,10 +22,6 @@ const config: Config = {
         Rubik: "'Rubik', sans-serif",
         Manrope: "'Manrope', sans-serif",
       },
-
-      backgroundImage: {
-        "svg-animation": "url('/public/images/background.svg')",
-      },
     },
   },
   plugins: [],
