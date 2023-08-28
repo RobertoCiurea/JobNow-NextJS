@@ -27,3 +27,7 @@ export interface CustomJobAdProps {
   salary: number;
   location: string;
 }
+
+export interface RefProps {
+  scrollRef: React.RefObject<HTMLDivElement> | null;
+}
