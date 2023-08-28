@@ -16,7 +16,7 @@ const CustomButton = ({
       disabled={false}
       type={btnType || "button"}
       className={`px-5 rounded-3xl p-2 text-center ${styles}`}
-      onClick={() => {}}
+      onClick={handleClick}
     >
       {title}
       {src && <Image src={src} width={width} height={height} alt={title} />}
