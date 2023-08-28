@@ -4,7 +4,7 @@ import { Navbar, Footer } from "@/components/index";
 
 export const metadata: Metadata = {
   title: "JobNow | Get your job right now",
-  description: "Discover over 10.000 job offers ",
+  description: "Join Now and Discover over 10.000 job offers ",
 };
 
 export default function RootLayout({
