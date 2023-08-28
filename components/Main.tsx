@@ -3,9 +3,13 @@ import Image from "next/image";
 import { SearchBar } from "./index";
 import SearchIcon from "@/public/icons/search.svg";
 import FilterIcon from "@/public/icons/filter.svg";
-const Main = () => {
+import { RefProps } from "@/types/index";
+const Main = ({ scrollRef }: RefProps) => {
   return (
-    <div className="flex px-5 md:px-12 pt-20 flex-col gap-10 mx-auto">
+    <div
+      className="flex px-5 md:px-12 pt-32 flex-col gap-10 mx-auto"
+      ref={scrollRef}
+    >
       {/*Title and sub title section */}
       <div>
         <h1 className="text-4xl md:text-5xl font-Rubik font-bold drop-shadow-xl pl-10">

@@ -1,10 +1,14 @@
-import * as React from "react";
+"use client";
+
+import React, { useRef } from "react";
 import { Hero, Main, CustomJobAd } from "@/components";
 const Home = () => {
+  const scrollRef = useRef(null);
   return (
     <main className="w-full ">
-      <Hero />
-      <Main />
+      <Hero scrollRef={scrollRef} />
+      <Main scrollRef={scrollRef} />
+      {/*Job ads are showing as a grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
         <CustomJobAd
           createdAt="26 August 2023"
