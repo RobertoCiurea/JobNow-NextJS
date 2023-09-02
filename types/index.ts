@@ -1,5 +1,6 @@
 import { MouseEventHandler } from "react";
-
+//next auth session
+import { Session } from "next-auth";
 export interface CustomButtonProps {
   title: string;
   styles?: string;
