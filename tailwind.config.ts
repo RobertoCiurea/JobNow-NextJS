@@ -16,6 +16,7 @@ const config: Config = {
       background: "hsl(var(--background))",
       gray: "hsl(var(--gray))",
       black: "hsl(var(--black))",
+      error: "hsl(var(--ac-400))",
     },
     extend: {
       fontFamily: {
