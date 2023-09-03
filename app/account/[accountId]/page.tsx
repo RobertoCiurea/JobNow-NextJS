@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import AddIcon from "@/public/icons/add.svg";
 import { CustomButton } from "@/components/index";
 import { useSession } from "next-auth/react";
@@ -36,19 +37,21 @@ const Page = () => {
             </h1>
           </div>
           <div className="flex justify-center md:block">
-            <CustomButton
-              title="Add"
-              btnType="button"
-              styles={
-                "bg-primary text-background w-1/4 flex gap-5 items-center text-xl md:w-full"
-              }
-              src={AddIcon}
-              width={32}
-              height={32}
-            />
+            <Link href="/create-ad">
+              <CustomButton
+                title="Add"
+                btnType="button"
+                styles={
+                  "bg-primary text-background w-1/4 flex gap-5 items-center text-xl md:w-full"
+                }
+                src={AddIcon}
+                width={32}
+                height={32}
+              />
+            </Link>
           </div>
         </div>
-        <div className="flex justify-between px-10 pt-10 pb-5 border-b-2 border-b-light md:justify-start md:gap-32">
+        <div className="flex justify-between px-10 mx-20 pt-10 pb-5 border-b-2 border-b-light md:justify-start md:gap-32">
           {/*Top section (menu) */}
           <h1
             className={`cursor-pointer font-Rubik font-bold text-2xl md:text-3xl ${dashboardActiveStyles}`}
@@ -67,8 +70,8 @@ const Page = () => {
     );
   } else {
     return (
-      <div className="flex justify-center items-center p-10 border-2 border-red-600 mx-10">
-        <h1 className="font-Rubik text-4xl text-red">
+      <div className="flex justify-center items-center border-2 border-error p-5 m-20">
+        <h1 className="font-Rubik text-4xl text-error">
           You don't have acces here!
         </h1>
       </div>
