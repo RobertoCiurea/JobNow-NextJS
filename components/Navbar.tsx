@@ -14,7 +14,7 @@ const Navbar = () => {
   const session = useSession();
   const userImage = session?.data?.user?.image;
   const slug = session?.data?.user?.name;
-  console.log(session);
+
   let topSpan: string = hamburger
     ? "rotate-45  translate-y-5 transition-transform "
     : " transition-transform ";
