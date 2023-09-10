@@ -1,4 +1,5 @@
 import { MouseEventHandler } from "react";
+import { Document } from "mongoose";
 //next auth session
 import { Session } from "next-auth";
 export interface CustomButtonProps {
@@ -31,4 +32,12 @@ export interface CustomJobAdProps {
 
 export interface RefProps {
   scrollRef: React.RefObject<HTMLDivElement> | null;
+}
+export interface AdsProps extends Document {
+  owner: string;
+  title: string;
+  tags?: string[];
+  salary: number;
+  location: string;
+  createdAt: Date;
 }
