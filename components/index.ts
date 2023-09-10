@@ -7,6 +7,7 @@ import Main from "./Main.tsx";
 import SearchBar from "./SearchBar.tsx";
 import CustomJobAd from "./CustomJobAd.tsx";
 import SessionProvider from "./SessionProvider.tsx";
+import ClientForm from "./ClientForm.tsx";
 
 export {
   Hero,
@@ -18,4 +19,5 @@ export {
   SearchBar,
   CustomJobAd,
   SessionProvider,
+  ClientForm,
 };
