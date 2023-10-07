@@ -1,12 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Image from "next/image";
 //useSession from next auth
 import { useSession } from "next-auth/react";
 //icons
 import AddIconPrimary from "@/public/icons/addPrimary.svg";
-import CheckIcon from "@/public/icons/check.svg";
 import { CustomButton } from "@/components/index";
+//types
+
+//the context from context provider
 
 //headless ui combobox
 import { Combobox } from "@headlessui/react";
@@ -16,7 +18,7 @@ import { places } from "@/utilities/places";
 const ClientForm = ({
   sendDataToDatabase,
 }: {
-  sendDataToDatabase: (formdata: FormData, tags: string[]) => Promise<unknown>;
+  sendDataToDatabase: (formdata: FormData, tags: String[]) => Promise<unknown>;
 }) => {
   type TagIdOptions = {
     id: String;
@@ -26,8 +28,8 @@ const ClientForm = ({
   // };
 
   //modify the tagsLength length for each click of the button
-  const [tagsLength, setTagsLength] = useState<TagIdOptions[]>([]);
-  const [tagsContent, setTagsContent] = useState<any[]>([]);
+
+  const [tags, setTags] = useState<any[]>([]);
   const [tagTitle, setTagTitle] = useState("");
 
   //
@@ -36,7 +38,7 @@ const ClientForm = ({
   const [querry, setQuerry] = useState("");
   //next auth session
   const session = useSession();
-
+  const userName = session?.data?.user?.name;
   //combomox filtered items
   const filteredPlaces =
     querry === ""
@@ -45,45 +47,39 @@ const ClientForm = ({
           return place.toLowerCase().includes(querry.toLowerCase());
         });
 
-  //remove id object from the array on click
-  function deleteTags(id: any): void {
-    setTagsLength((currentTagsLength): any => {
-      return currentTagsLength.filter((item) => {
-        return item.id != id;
-      });
+  //aremove the tag onclick
+  function removeTags(id: TagIdOptions) {
+    setTags((currentTags: any[]) => {
+      return currentTags.filter((items): any => items.id != id);
     });
-  }
-  //add an id object in array onclick
-  function addTags(e: any) {
-    e.preventDefault();
-    if (tagsLength.length < 5) {
-      setTagsLength((currentTagsLength): any => [
-        ...currentTagsLength,
-        { id: crypto.randomUUID() },
-      ]);
-    }
   }
 
-  //add the title of each tag in tagsConent array
-  function changeTagsContent() {
-    setTagsContent((prevTagsConent) => {
-      if (tagTitle === "") {
-        return [...prevTagsConent];
+  type TagsContentTypes = {
+    title: string;
+    id: string;
+  };
+  function changeTagsContent(e: any) {
+    e.preventDefault();
+    setTags((curentTags: TagsContentTypes[]) => {
+      if (tagTitle === "" || tags.length >= 5) {
+        return [...curentTags];
       } else {
-        return [...prevTagsConent, { title: tagTitle }];
+        return [...curentTags, { id: crypto.randomUUID(), title: tagTitle }];
       }
     });
+    setTagTitle("");
   }
-  //send tagsContent array to parent page
+
+  //remove tags from the tags array
 
   //check if the user is logged in
   if (session && session?.data?.user) {
     return (
       <form
         className="flex flex-col py-20 items-center flex-1"
-        action={async (formData: FormData, tagsContent: string[]) => {
+        action={async (formData: FormData) => {
           try {
-            await sendDataToDatabase(formData, tagsContent);
+            await sendDataToDatabase(formData, tags);
           } catch (error) {
             console.log(error);
           }
@@ -111,7 +107,7 @@ const ClientForm = ({
             />
             <input
               type="text"
-              name="owner"
+              name="company"
               placeholder="Add your company name"
               required
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
@@ -130,14 +126,14 @@ const ClientForm = ({
             <h1 className="font-Rubik text-3xl font-bold">More</h1>
             <input
               type="email"
-              name="title"
+              name="email"
               placeholder="Add an email adress..."
               required
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
             <input
               type="number"
-              name="title"
+              name="phone"
               placeholder="Add a phone number..."
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
@@ -146,7 +142,7 @@ const ClientForm = ({
               type="text"
               name="owner"
               className="hidden"
-              defaultValue={session?.data?.user.name!}
+              defaultValue={userName!}
             />
 
             {/*Combobox */}
@@ -176,51 +172,45 @@ const ClientForm = ({
             </Combobox>
 
             <div className="flex gap-10 flex-col">
-              <div className="flex gap-20">
-                <h1 className="font-Rubik text-xl">Click here to ad tags</h1>
+              {/*Add tags by input*/}
+              <div className="flex gap-5">
+                <input
+                  type="text"
+                  placeholder="Add a tag"
+                  className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
+                  value={tagTitle}
+                  onChange={(e) => setTagTitle(e.target.value)}
+                />
                 <Image
                   src={AddIconPrimary}
-                  alt="Add more tags button"
-                  width={38}
-                  onClick={addTags}
+                  alt="Add a tag button"
+                  width={35}
                   className="cursor-pointer"
+                  onClick={changeTagsContent}
                 />
               </div>
-              {/*Add more input fields by the length of array "tagsLength" */}
-              {tagsLength?.length > 0 &&
-                tagsLength.map((item: any) => (
-                  <div className="flex gap-5 justify-center text-black pl-12">
-                    <input
-                      type="text"
-                      key={item.id}
-                      name="tag"
-                      onChange={(e) => setTagTitle(e.target.value)}
-                      placeholder="Add a tag"
-                      className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
-                    />
-                    {/* side buttons section */}
-                    <Image
-                      src={CheckIcon}
-                      alt="Set Tag Button"
-                      title="Set a tag on click"
-                      onClick={changeTagsContent}
-                      className="cursor-pointer"
-                      width={32}
-                    />
-                    <Image
-                      src={AddIconPrimary}
-                      alt="Delete button"
-                      title="Deelte tag input"
-                      onClick={() => deleteTags(item.id)}
-                      className="-rotate-45 cursor-pointer "
-                    />
-                  </div>
-                ))}
-              {tagsLength.length == 5 && (
+
+              {tags.length == 5 && (
                 <h1 className="text-2xl text-error font-Rubik text-center">
                   You can't add more tags
                 </h1>
               )}
+              <ul className="flex  flex-col items-center">
+                {tags.length > 0 &&
+                  tags.map((tag: any) => (
+                    <li key={tag.id} className="flex gap-2 mb-5">
+                      <span className="font-Rubik text-lg bg-light px-4 py-1 rounded-3xl">
+                        #{tag.title}
+                      </span>
+                      <Image
+                        src={AddIconPrimary}
+                        alt="Delete tag button"
+                        className="rotate-45 cursor-pointer"
+                        onClick={() => removeTags(tag.id)}
+                      />
+                    </li>
+                  ))}
+              </ul>
             </div>
           </div>
         </div>
