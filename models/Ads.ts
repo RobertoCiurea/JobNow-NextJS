@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+const tagsSchema = new mongoose.Schema({
+  id: {
+    type: String,
+  },
+  title: {
+    type: String,
+  },
+});
+
 const adsSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -7,6 +16,10 @@ const adsSchema = new mongoose.Schema({
   },
   salary: {
     type: Number,
+    required: true,
+  },
+  company: {
+    type: String,
     required: true,
   },
   owner: {
@@ -30,9 +43,10 @@ const adsSchema = new mongoose.Schema({
     required: true,
   },
   tags: {
-    type: [String],
+    type: [tagsSchema],
     required: false,
   },
+
   createdAt: {
     type: Date,
     default: Date.now(),
