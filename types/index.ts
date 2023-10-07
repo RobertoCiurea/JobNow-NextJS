@@ -41,3 +41,7 @@ export interface AdsProps extends Document {
   location: string;
   createdAt: Date;
 }
+export interface ClientContextTypes {
+  tags: string[];
+  setTags: (data: string | any) => void;
+}
