@@ -7,7 +7,7 @@ import Heart from "@/public/icons/heart.svg";
 import HeartFocused from "@/public/icons/Heart-focused.svg";
 
 const CustomJobAd = ({
-  createdAt,
+  date,
   title,
   tags,
   salary,
@@ -36,7 +36,7 @@ const CustomJobAd = ({
         <div className="flex justify-between py-5">
           {/*Date section */}
           <div className="p-1 flex items-center px-2 bg-background rounded-3xl">
-            <h1 className="font-rubik font-bold text-base ">{createdAt}</h1>
+            <h1 className="font-rubik font-bold text-base ">{date}</h1>
           </div>
           {/*Heart Button */}
           <div className="bg-background p-2 rounded-full cursor-pointer">
@@ -54,12 +54,12 @@ const CustomJobAd = ({
         {/*Job tags */}
         <div className="flex flex-wrap gap-2 justify-center py-2">
           {/*tag */}
-          {tags.map((tag: string, index: number) => (
+          {tags.map((tag: any, index: number) => (
             <h1
               className="font-Manrope border border-black rounded-3xl  px-5 flex  items-center"
               key={index}
             >
-              {tag}
+              {tag.title}
             </h1>
           ))}
         </div>
