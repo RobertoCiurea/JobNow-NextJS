@@ -2,9 +2,9 @@
 import { connectToDatabase } from "@/db";
 import { adsModel } from "@/models/Ads";
 import { AdsProps } from "@/types/index";
+
 //next cache
 import { revalidateTag } from "next/cache";
-
 //send data to database
 
 export const sendDataToDatabase = async (
@@ -29,9 +29,8 @@ export const sendDataToDatabase = async (
       createdAt: new Date(),
     });
     newAd.save();
-    // console.log(newAd);
+
     revalidateTag("ads");
-    console.log(newAd);
   } catch (error) {
     return {
       status: 500,
