@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import AddIconPrimary from "@/public/icons/addPrimary.svg";
 import { CustomButton } from "@/components/index";
 //types
-
+import { TagsContentTypes } from "@/types";
 //the context from context provider
 
 //headless ui combobox
@@ -54,10 +54,6 @@ const ClientForm = ({
     });
   }
 
-  type TagsContentTypes = {
-    title: string;
-    id: string;
-  };
   function changeTagsContent(e: any) {
     e.preventDefault();
     setTags((curentTags: TagsContentTypes[]) => {

@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
 import { Document } from "mongoose";
-//next auth session
-import { Session } from "next-auth";
+import mongoose from "mongoose";
+
 export interface CustomButtonProps {
   title: string;
   styles?: string;
@@ -22,26 +22,53 @@ export interface SearchBarProps {
   imageStyles?: string;
 }
 
-export interface CustomJobAdProps {
-  createdAt: string;
-  title: string;
-  tags: string[];
-  salary: number;
-  location: string;
-}
-
 export interface RefProps {
   scrollRef: React.RefObject<HTMLDivElement> | null;
 }
 export interface AdsProps extends Document {
+  _id: mongoose.Types.ObjectId | string;
   owner: string;
   title: string;
   tags?: string[];
   salary: number;
   location: string;
   createdAt: Date;
+  company: string;
+  description: string;
+  email: string;
+  phone: number;
 }
+
 export interface ClientContextTypes {
   tags: string[];
   setTags: (data: string | any) => void;
+}
+export interface TagsContentTypes {
+  title: string;
+  id: string;
+}
+export interface CustomJobAdProps {
+  company: string;
+  date: string;
+  title: string;
+  description: string;
+  email: string;
+  phone: number | string;
+  salary: number;
+  location: string;
+  tags?: string[];
+}
+
+export interface Ads {
+  company: string;
+  date: string;
+  description: string;
+  email: string;
+  location: string;
+  owner: string;
+  phone: number | string;
+  salary: number;
+  tags?: string[];
+  title: string;
+  _id: string;
 }
