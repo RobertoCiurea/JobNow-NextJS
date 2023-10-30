@@ -51,28 +51,6 @@ const Home = () => {
                 key={index}
               />
             ))}
-          <CustomJobAd
-            date="26 August 2023"
-            title="Oracle Backend Developer"
-            tags={["Full Time", "Java", "SQL", "IT"]}
-            salary={3500}
-            location="Bucharest, RO"
-            company=""
-            phone=""
-            description=""
-            email=""
-          />
-          <CustomJobAd
-            date="13 April 2006"
-            title="PHP Web & Server Developer"
-            tags={["PHP", "Backend", "Fullstack", "Server", "Full time"]}
-            salary={5500}
-            location="Berlin, DE"
-            company=""
-            phone=""
-            description=""
-            email=""
-          />
         </div>
       )}
     </main>
