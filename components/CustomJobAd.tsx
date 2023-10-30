@@ -12,6 +12,7 @@ const CustomJobAd = ({
   tags,
   salary,
   location,
+  company,
 }: CustomJobAdProps) => {
   const [focused, setFocused] = useState(false);
   const [style, setStyle] = useState("");
@@ -63,6 +64,7 @@ const CustomJobAd = ({
             </h1>
           ))}
         </div>
+        <h1 className="font-semibold py-2 font-Manrope">{company} &copy;</h1>
       </section>
       {/*Bottom section */}
       <div className="flex justify-between p-5">
