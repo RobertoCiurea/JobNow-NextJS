@@ -97,7 +97,7 @@ const Page = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
             {active &&
-              myAds.map((ad: Ads) => (
+              myAds.map((ad: Ads, index: Number) => (
                 <CustomJobAd
                   company={ad.company}
                   title={ad.title}
@@ -108,6 +108,7 @@ const Page = () => {
                   phone={ad.phone}
                   description={ad.description}
                   tags={ad.tags}
+                  key={index}
                 />
               ))}
           </div>
