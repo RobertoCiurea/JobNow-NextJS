@@ -1,15 +1,34 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AddIcon from "@/public/icons/add.svg";
 import { CustomButton } from "@/components/index";
 import { useSession } from "next-auth/react";
+//spinner image
+import Spinner from "@/public/icons/spinner.svg";
+//Custom Job Ad Component
+import { CustomJobAd } from "@/components/index";
+//ad props
+import { Ads } from "@/types";
+//get my ads function
+import getOwnerAds from "@/utilities/getOwnerAds";
+
 const Page = () => {
   const session = useSession();
   const userImage = session?.data?.user?.image;
   const userName = session?.data?.user?.name;
-
+  //fetch data from server
+  const getData = async () => {
+    const data = await getOwnerAds(userName);
+    return data;
+  };
+  const [myAds, setMyAds] = useState([]);
+  useEffect(() => {
+    getData().then((response) => {
+      setMyAds(response);
+    });
+  }, []);
   //chagnge state for active status of element
   const [active, setActive] = useState(true);
 
@@ -66,6 +85,33 @@ const Page = () => {
             Favourite
           </h1>
         </div>
+        {myAds.length === 0 ? (
+          <div className="w-full h-screen flex justify-center items-center">
+            <Image
+              src={Spinner}
+              className="animate-spin"
+              alt="Spinner"
+              width={150}
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
+            {active &&
+              myAds.map((ad: Ads) => (
+                <CustomJobAd
+                  company={ad.company}
+                  title={ad.title}
+                  location={ad.title}
+                  salary={ad.salary}
+                  date={ad.date}
+                  email={ad.email}
+                  phone={ad.phone}
+                  description={ad.description}
+                  tags={ad.tags}
+                />
+              ))}
+          </div>
+        )}
       </>
     );
   } else {
