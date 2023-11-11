@@ -13,20 +13,35 @@ import { CustomJobAd } from "@/components/index";
 import { Ads } from "@/types";
 //get my ads function
 import getOwnerAds from "@/utilities/getOwnerAds";
+//get favorites ads function
+import getFavoritesAds from "@/utilities/getFavoritesAds";
 
 const Page = () => {
   const session = useSession();
   const userImage = session?.data?.user?.image;
   const userName = session?.data?.user?.name;
+  const userEmail = session?.data?.user?.email;
   //fetch data from server
-  const getData = async () => {
-    const data = await getOwnerAds(userName);
+  const getAdsData = async () => {
+    const data = await getOwnerAds(userEmail);
     return data;
   };
+  const getFavAdsData = async () => {
+    const data = await getFavoritesAds(userEmail);
+    return data;
+  };
+
   const [myAds, setMyAds] = useState([]);
+  const [favAds, setFavAds] = useState([]);
+  const [myAdsLoading, setMyAdsLoading] = useState(true);
+
   useEffect(() => {
-    getData().then((response) => {
+    getAdsData().then((response) => {
       setMyAds(response);
+      setMyAdsLoading(false);
+    });
+    getFavAdsData().then((response) => {
+      setFavAds(response);
     });
   }, []);
   //chagnge state for active status of element
@@ -85,34 +100,65 @@ const Page = () => {
             Favourite
           </h1>
         </div>
-        {myAds.length === 0 ? (
-          <div className="w-full h-screen flex justify-center items-center">
-            <Image
-              src={Spinner}
-              className="animate-spin"
-              alt="Spinner"
-              width={150}
-            />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
-            {active &&
-              myAds.map((ad: Ads, index: Number) => (
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20 mt-5">
+          {active ? (
+            myAdsLoading ? (
+              <div className="w-full flex justify-center items-center">
+                <Image
+                  src={Spinner}
+                  className="animate-spin"
+                  alt="Spinner"
+                  width={150}
+                />
+              </div>
+            ) : myAds.length === 0 ? (
+              <h1 className="font-Rubik text-xl o-5 text-center">
+                You have no ads yet.
+              </h1>
+            ) : (
+              myAds.map((ad: Ads, index: number) => (
                 <CustomJobAd
-                  company={ad.company}
-                  title={ad.title}
-                  location={ad.title}
-                  salary={ad.salary}
                   date={ad.date}
-                  email={ad.email}
+                  title={ad.title}
+                  tags={ad.tags}
+                  salary={ad.salary}
+                  location={ad.location}
+                  company={ad.company}
                   phone={ad.phone}
                   description={ad.description}
-                  tags={ad.tags}
+                  email={ad.description}
+                  id={ad._id}
+                  client={userEmail}
+                  favorites={ad.favorites}
                   key={index}
                 />
-              ))}
-          </div>
-        )}
+              ))
+            )
+          ) : favAds.length === 0 ? (
+            <h1 className="font-Rubik text-xl o-5 text-center">
+              You have no ads yet.
+            </h1>
+          ) : (
+            favAds.map((ad: Ads, index: number) => (
+              <CustomJobAd
+                date={ad.date}
+                title={ad.title}
+                tags={ad.tags}
+                salary={ad.salary}
+                location={ad.location}
+                company={ad.company}
+                phone={ad.phone}
+                description={ad.description}
+                email={ad.description}
+                id={ad._id}
+                client={userEmail}
+                favorites={ad.favorites}
+                key={index}
+              />
+            ))
+          )}
+        </div>
       </>
     );
   } else {
