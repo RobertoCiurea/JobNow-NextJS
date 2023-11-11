@@ -7,9 +7,12 @@ import Image from "next/image";
 //spinner
 import Spinner from "@/public/icons/spinner.svg";
 import { Ads } from "@/types";
-
+//useSession from next-auth
+import { useSession } from "next-auth/react";
 const Home = () => {
   const [jobAds, setJobAds] = useState<any>([]);
+  const session = useSession();
+  const userEmail = session?.data?.user?.email;
   const getAds = async () => {
     const data = await getDataFromDatabase();
     return data;
@@ -48,6 +51,9 @@ const Home = () => {
                 phone={ad.phone}
                 description={ad.description}
                 email={ad.description}
+                id={ad._id}
+                client={userEmail}
+                favorites={ad.favorites}
                 key={index}
               />
             ))}
