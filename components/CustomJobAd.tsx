@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CustomJobAdProps } from "@/types";
 import { CustomButton } from "@/components/index";
 import Heart from "@/public/icons/heart.svg";
 import HeartFocused from "@/public/icons/Heart-focused.svg";
+//add ads to favourites list
+import { addToFavorite } from "@/utilities/addToFavorite";
 
 const CustomJobAd = ({
   date,
@@ -13,17 +15,34 @@ const CustomJobAd = ({
   salary,
   location,
   company,
+  id,
+  favorites,
+  client,
 }: CustomJobAdProps) => {
+  //set ad to favorite (true/false) using useState
+
   const [focused, setFocused] = useState(false);
-  const [style, setStyle] = useState("");
+
+  useEffect(() => {
+    if (favorites.includes(client) && client) {
+      setFocused(true);
+    }
+  }, []);
+  const [transition, setTransition] = useState("");
 
   function onClick() {
-    setFocused((prevFocused: boolean) => !prevFocused);
-    setStyle("animate-spin");
-    setInterval(() => {
-      setStyle("");
-    }, 1000);
-    console.log(style);
+    if (!client) {
+      //replace with custom notification later toastify
+      alert("You have to be logged in to add tp favorites");
+    } else {
+      setFocused((prevFocused: boolean) => !prevFocused);
+      console.log(focused);
+      addToFavorite(id, focused, client);
+      setTransition("transiton-all opacity-80 animate-bounce ");
+      setInterval(() => {
+        setTransition("transiton-all opacity-100 scale-120");
+      }, 500);
+    }
   }
 
   return (
@@ -33,7 +52,7 @@ const CustomJobAd = ({
       {/*Inner content */}
       {/*Top section */}
       <section className="flex flex-col bg-medium py-2 px-5 rounded-3xl">
-        {/*Top date and favourite button */}
+        {/*Top date and favorite button */}
         <div className="flex justify-between py-5">
           {/*Date section */}
           <div className="p-1 flex items-center px-2 bg-background rounded-3xl">
@@ -46,7 +65,7 @@ const CustomJobAd = ({
               alt="Add to favourite"
               width={30}
               onClick={onClick}
-              className={`${style}`}
+              className={transition}
             />
           </div>
         </div>
