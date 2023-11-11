@@ -25,7 +25,7 @@ const getDataFromDatabase = async () => {
       //modify the date to something reasonable
       const date = ad.createdAt;
       const day = date.getDate();
-      const month = date.getMonth() + 1;
+      const month = date.getMonth();
       const year = date.getFullYear();
       const actualMonth = yearMonths[month];
       const formattedDate = `${day} ${actualMonth} ${year}`;
@@ -45,6 +45,7 @@ const getDataFromDatabase = async () => {
             title: tag.title,
           };
         }),
+        favorites: ad.favorites,
         date: formattedDate,
       };
     });

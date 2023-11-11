@@ -2,6 +2,8 @@
 import { adsModel } from "@/models/Ads";
 import { AdsProps } from "@/types";
 import { connectToDatabase } from "../db";
+//create simplifed ad object
+
 const getOwnerAds = async (owner: String) => {
   const yearMonths = [
     "January",
@@ -25,7 +27,7 @@ const getOwnerAds = async (owner: String) => {
       //modify the date to something reasonable
       const date = ad.createdAt;
       const day = date.getDate();
-      const month = date.getMonth() + 1;
+      const month = date.getMonth();
       const year = date.getFullYear();
       const actualMonth = yearMonths[month];
       const formattedDate = `${day} ${actualMonth} ${year}`;
@@ -45,6 +47,7 @@ const getOwnerAds = async (owner: String) => {
             title: tag.title,
           };
         }),
+        favorites: ad.favorites,
         date: formattedDate,
       };
     });
