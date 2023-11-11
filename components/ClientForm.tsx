@@ -38,7 +38,7 @@ const ClientForm = ({
   const [querry, setQuerry] = useState("");
   //next auth session
   const session = useSession();
-  const userName = session?.data?.user?.name;
+  const userEmail = session?.data?.user?.email;
   //combomox filtered items
   const filteredPlaces =
     querry === ""
@@ -138,7 +138,7 @@ const ClientForm = ({
               type="text"
               name="owner"
               className="hidden"
-              defaultValue={userName!}
+              defaultValue={userEmail!}
             />
 
             {/*Combobox */}
