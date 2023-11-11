@@ -46,6 +46,10 @@ const adsSchema = new mongoose.Schema({
     type: [tagsSchema],
     required: false,
   },
+  favorites: {
+    type: [String],
+    required: true,
+  },
 
   createdAt: {
     type: Date,
