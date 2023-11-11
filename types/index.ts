@@ -37,6 +37,7 @@ export interface AdsProps extends Document {
   description: string;
   email: string;
   phone: number;
+  favorites: string[];
 }
 
 export interface ClientContextTypes {
@@ -56,7 +57,10 @@ export interface CustomJobAdProps {
   phone: number | string;
   salary: number;
   location: string;
+  favorites: string[];
+  client: string;
   tags?: string[];
+  id?: string;
 }
 
 export interface Ads {
@@ -70,5 +74,7 @@ export interface Ads {
   salary: number;
   tags?: string[];
   title: string;
+  favorites: string[];
+  client: string;
   _id: string;
 }
