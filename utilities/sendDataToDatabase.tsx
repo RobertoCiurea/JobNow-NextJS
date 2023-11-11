@@ -26,6 +26,7 @@ export const sendDataToDatabase = async (
       phone: formData.get("phone"),
       location: formData.get("location"),
       tags: tagsArr,
+      favorites: [],
       createdAt: new Date(),
     });
     newAd.save();
