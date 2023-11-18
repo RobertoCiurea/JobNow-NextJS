@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import { SearchBar } from "./index";
 import SearchIcon from "@/public/icons/search.svg";
 import FilterIcon from "@/public/icons/filter.svg";
 import { RefProps } from "@/types/index";
+//main context to sort ads
+import { SortContext } from "@/app/page";
 const Main = ({ scrollRef }: RefProps) => {
+  const { sort, setSort } = useContext(SortContext);
+  //handle the value from option tags and set it to the sort variable
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSort = e.target.value;
+    setSort(selectedSort);
+    //console.log(sort);
+  };
+
   return (
     <div
       className="flex px-5 md:px-12 pt-32 flex-col gap-10 mx-auto"
@@ -49,17 +59,21 @@ const Main = ({ scrollRef }: RefProps) => {
         </h1>
         <div className="flex gap-5 items-center">
           <h1 className="font Rubik text-xl  font-semibold">Sort</h1>
-          <select className="text-lg lg:text-xl font-Rubik cursor-pointer border-b-2 border-primary focus:border-2 focus:border-primary focus:rounded-full focus:outline-none   ">
-            <option value="0" className="cursor-poiunter">
-              Recommended
+          <select
+            value={sort}
+            onChange={handleSortChange}
+            className="text-lg lg:text-xl font-Rubik cursor-pointer border-b-2 border-primary focus:border-2 focus:border-primary focus:rounded-full focus:outline-none   "
+          >
+            <option value="oldest" className="cursor-poiunter">
+              Oldest
             </option>
-            <option value="1" className="cursor-poiunter">
+            <option value="newest" className="cursor-poiunter">
               Newest
             </option>
-            <option value="2" className="cursor-pointer">
+            <option value="most-paid" className="cursor-pointer">
               Most paid
             </option>
-            <option value="3" className="cursor-pointer">
+            <option value="less-paid" className="cursor-pointer">
               Less paid
             </option>
           </select>
