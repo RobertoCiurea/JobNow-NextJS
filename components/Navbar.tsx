@@ -84,13 +84,15 @@ const Navbar = () => {
                 width={23}
                 height={23}
               />
-              <Image
-                src={session?.data?.user?.image!}
-                alt="User image"
-                width={52}
-                height={52}
-                className="object-contain rounded-full cursor-pointer hover:scale-125 transition-all "
-              />
+              <Link href={`/account/${slug}`}>
+                <Image
+                  src={session?.data?.user?.image!}
+                  alt="User image"
+                  width={52}
+                  height={52}
+                  className="object-contain rounded-full cursor-pointer hover:scale-125 transition-all "
+                />
+              </Link>
             </div>
           )}
         </>
