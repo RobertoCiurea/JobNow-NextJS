@@ -76,7 +76,7 @@ const Page = () => {
                 title="Add"
                 btnType="button"
                 styles={
-                  "bg-primary text-background w-1/4 flex gap-5 items-center text-xl md:w-full"
+                  "bg-primary text-background flex gap-5 items-center text-xl"
                 }
                 src={AddIcon}
                 width={32}
