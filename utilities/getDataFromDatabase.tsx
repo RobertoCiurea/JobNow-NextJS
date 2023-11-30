@@ -39,6 +39,7 @@ const getDataFromDatabase = async () => {
         email: ad.email,
         phone: ad.phone,
         location: ad.location,
+        category: ad.category,
         tags: ad.tags.map((tag: any) => {
           return {
             _id: tag._id.toString(),

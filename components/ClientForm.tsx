@@ -8,13 +8,14 @@ import AddIconPrimary from "@/public/icons/addPrimary.svg";
 import { CustomButton } from "@/components/index";
 //types
 import { TagsContentTypes } from "@/types";
-//the context from context provider
 
 //headless ui combobox
 import { Combobox } from "@headlessui/react";
 //ai generated places in the world
 import { places } from "@/utilities/places";
 
+//jobs categories array
+import { jobCategories } from "@/utilities/categories";
 const ClientForm = ({
   sendDataToDatabase,
 }: {
@@ -32,22 +33,20 @@ const ClientForm = ({
   const [tags, setTags] = useState<any[]>([]);
   const [tagTitle, setTagTitle] = useState("");
 
-  //
-
   //querry the location states
-  const [querry, setQuerry] = useState("");
+  const [locationQuerry, setLocationQuerry] = useState("");
   //next auth session
   const session = useSession();
   const userEmail = session?.data?.user?.email;
   //combomox filtered items
   const filteredPlaces =
-    querry === ""
+    locationQuerry === ""
       ? places
       : places.filter((place) => {
-          return place.toLowerCase().includes(querry.toLowerCase());
+          return place.toLowerCase().includes(locationQuerry.toLowerCase());
         });
 
-  //aremove the tag onclick
+  //remove the tag onclick
   function removeTags(id: TagIdOptions) {
     setTags((currentTags: any[]) => {
       return currentTags.filter((items): any => items.id != id);
@@ -66,7 +65,16 @@ const ClientForm = ({
     setTagTitle("");
   }
 
-  //remove tags from the tags array
+  //use headless ui combobox for job categroies
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categoryQuerry, setCategoryQuerry] = useState("");
+
+  const filteredCategory =
+    categoryQuerry === " "
+      ? jobCategories
+      : jobCategories.filter((category) => {
+          return category.toLowerCase().includes(categoryQuerry.toLowerCase());
+        });
 
   //check if the user is logged in
   if (session && session?.data?.user) {
@@ -140,23 +148,48 @@ const ClientForm = ({
               className="hidden"
               defaultValue={userEmail!}
             />
+            {/*Category Combobox */}
+            <Combobox value={selectedCategory} onChange={setSelectedCategory}>
+              <Combobox.Input
+                onChange={(e) => setCategoryQuerry(e.target.value)}
+                placeholder="Select a Category"
+                required
+                name="category"
+                className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
+              />
+              <Combobox.Options className="z-10 bg-lighter p-8 rounded-3xl flex mx-5 flex-wrap overflow-y-auto h-80 gap-5">
+                {filteredCategory.length > 0 ? (
+                  filteredCategory.map((category) => (
+                    <Combobox.Option
+                      key={category}
+                      value={category}
+                      className="mb-5 font-Manrope border-b-2 border-b-light text-center cursor-pointer hover:border-b-black"
+                    >
+                      {category}
+                    </Combobox.Option>
+                  ))
+                ) : (
+                  <h1>No matches found</h1>
+                )}
+              </Combobox.Options>
+            </Combobox>
 
-            {/*Combobox */}
+            {/*Location Combobox */}
             <Combobox>
               <Combobox.Input
-                onChange={(e) => setQuerry(e.target.value)}
+                onChange={(e) => setLocationQuerry(e.target.value)}
                 name="location"
                 placeholder="Select a location"
                 required
                 className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
               />
-              <Combobox.Options className="z-10 bg-lighter p-5 rounded-3xl grid sm:grid-cols-2 md:grid-cols-4 gap-5 ">
+              <Combobox.Options className="z-10 bg-lighter p-8 rounded-3xl flex mx-5 flex-wrap overflow-y-auto h-80 gap-5">
                 {filteredPlaces?.length > 0 ? (
                   filteredPlaces.map((place: any) => (
                     <Combobox.Option
                       value={place}
                       key={place}
-                      className="mb-5 font-Manrope border-b-2 border-b-light text-center cursor-pointer"
+                      className="mb-5 font-Manrope border-b-2 border-b-light text-center cursor-pointer hover:border-b-black"
                     >
                       {place ? place : "No matches found"}
                     </Combobox.Option>

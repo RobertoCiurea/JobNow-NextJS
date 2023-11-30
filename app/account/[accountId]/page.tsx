@@ -130,6 +130,7 @@ const Page = () => {
                   email={ad.description}
                   id={ad._id}
                   client={userEmail}
+                  category={ad.category}
                   favorites={ad.favorites}
                   key={index}
                 />
@@ -153,6 +154,7 @@ const Page = () => {
                 email={ad.description}
                 id={ad._id}
                 client={userEmail}
+                category={ad.category}
                 favorites={ad.favorites}
                 key={index}
               />

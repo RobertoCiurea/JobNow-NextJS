@@ -14,6 +14,7 @@ const CustomJobAd = ({
   tags,
   salary,
   location,
+  category,
   company,
   id,
   favorites,
@@ -84,6 +85,7 @@ const CustomJobAd = ({
           ))}
         </div>
         <h1 className="font-semibold py-2 font-Manrope">{company} &copy;</h1>
+        <h1>{category}</h1>
       </section>
       {/*Bottom section */}
       <div className="flex justify-between p-5">

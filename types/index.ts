@@ -24,6 +24,7 @@ export interface SearchBarProps {
 
 export interface RefProps {
   scrollRef: React.RefObject<HTMLDivElement> | null;
+  modalRef?: React.RefObject<HTMLDivElement> | any;
 }
 export interface AdsProps extends Document {
   _id: mongoose.Types.ObjectId | string;
@@ -35,6 +36,7 @@ export interface AdsProps extends Document {
   createdAt: Date;
   company: string;
   description: string;
+  category: string;
   email: string;
   phone: number;
   favorites: string[];
@@ -58,6 +60,7 @@ export interface CustomJobAdProps {
   salary: number;
   location: string;
   favorites: string[];
+  category: string;
   client: string;
   tags?: string[];
   id?: string;
@@ -75,6 +78,7 @@ export interface Ads {
   tags?: string[];
   title: string;
   favorites: string[];
+  category: string;
   client: string;
   _id: string;
 }

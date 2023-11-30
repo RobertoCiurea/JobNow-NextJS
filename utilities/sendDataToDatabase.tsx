@@ -24,6 +24,7 @@ export const sendDataToDatabase = async (
       description: formData.get("description"),
       email: formData.get("email"),
       phone: formData.get("phone"),
+      category: formData.get("category"),
       location: formData.get("location"),
       tags: tagsArr,
       favorites: [],
