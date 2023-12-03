@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+"use client";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { SearchBar } from "./index";
 import SearchIcon from "@/public/icons/search.svg";
@@ -6,15 +7,49 @@ import FilterIcon from "@/public/icons/filter.svg";
 import { RefProps } from "@/types/index";
 //main context to sort ads
 import { SortContext } from "@/app/page";
-const Main = ({ scrollRef }: RefProps) => {
+const Main = ({ scrollRef, modalRef }: RefProps) => {
+  //sort state
   const { sort, setSort } = useContext(SortContext);
+
   //handle the value from option tags and set it to the sort variable
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedSort = e.target.value;
     setSort(selectedSort);
     //console.log(sort);
   };
-
+  //toggle the dialog on click
+  //set state to check if dialog is opened or closed
+  const [dialogOpened, setDialogOpened] = useState(false);
+  const toggleDialog = () => {
+    if (!dialogOpened) {
+      modalRef.current.showModal();
+      setDialogOpened(true);
+    } else {
+      modalRef.current.close();
+      setDialogOpened(false);
+    }
+  };
+  //close modal by clicking outside of dialog
+  const closeModalOnOutsideClick = (e: MouseEvent) => {
+    const dialogDimensions = modalRef.current.getBoundingClientRect();
+    if (
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom
+    ) {
+      toggleDialog();
+    }
+  };
+  //apply useEffect to add an event listener to the document
+  useEffect(() => {
+    if (dialogOpened) {
+      document.body.addEventListener("click", closeModalOnOutsideClick);
+    }
+    return () => {
+      document.body.removeEventListener("click", closeModalOnOutsideClick);
+    };
+  }, [dialogOpened]);
   return (
     <div
       className="flex px-5 md:px-12 pt-32 flex-col gap-10 mx-auto"
@@ -49,6 +84,7 @@ const Main = ({ scrollRef }: RefProps) => {
             width={38}
             alt="Filter button"
             className="cursor-pointer"
+            onClick={toggleDialog}
           />
         </div>
       </div>
