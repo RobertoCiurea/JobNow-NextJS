@@ -31,8 +31,8 @@ const Page = () => {
     return data;
   };
 
-  const [myAds, setMyAds] = useState([]);
-  const [favAds, setFavAds] = useState([]);
+  const [myAds, setMyAds] = useState<any>([]);
+  const [favAds, setFavAds] = useState<any>([]);
   const [myAdsLoading, setMyAdsLoading] = useState(true);
 
   useEffect(() => {
