@@ -8,7 +8,8 @@ import AddIconPrimary from "@/public/icons/addPrimary.svg";
 import { CustomButton } from "@/components/index";
 //types
 import { TagsContentTypes } from "@/types";
-
+//redirect context
+import { RedirectContext } from "@/app/create-ad/page";
 //headless ui combobox
 import { Combobox } from "@headlessui/react";
 //ai generated places in the world
@@ -33,6 +34,9 @@ const ClientForm = ({
   const [tags, setTags] = useState<any[]>([]);
   const [tagTitle, setTagTitle] = useState("");
 
+  //redirect contex
+  const { redirected, setRedirected } = useContext(RedirectContext);
+  // console.log(redirected);
   //querry the location states
   const [locationQuerry, setLocationQuerry] = useState("");
   //next auth session
@@ -83,7 +87,8 @@ const ClientForm = ({
         className="flex flex-col py-20 items-center flex-1"
         action={async (formData: FormData) => {
           try {
-            await sendDataToDatabase(formData, tags);
+            const result = await sendDataToDatabase(formData, tags);
+            setRedirected(result);
           } catch (error) {
             console.log(error);
           }
@@ -102,9 +107,9 @@ const ClientForm = ({
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
             <input
-              type="number"
+              type="text"
               name="salary"
-              pattern="[0][0-9]"
+              pattern="[0-9]"
               placeholder="Add a salary (in &euro;)"
               required
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
