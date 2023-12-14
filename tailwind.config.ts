@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+import colors from "tailwindcss/colors";
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -22,6 +22,9 @@ const config: Config = {
       fontFamily: {
         Rubik: "'Rubik', sans-serif",
         Manrope: "'Manrope', sans-serif",
+      },
+      colors: {
+        ...colors,
       },
     },
   },
