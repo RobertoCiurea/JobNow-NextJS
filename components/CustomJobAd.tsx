@@ -5,9 +5,10 @@ import { CustomJobAdProps } from "@/types";
 import { CustomButton } from "@/components/index";
 import Heart from "@/public/icons/heart.svg";
 import HeartFocused from "@/public/icons/Heart-focused.svg";
+//next navigation redirect
+import { useRouter } from "next/navigation";
 //add ads to favourites list
 import { addToFavorite } from "@/utilities/addToFavorite";
-
 const CustomJobAd = ({
   date,
   title,
@@ -30,6 +31,12 @@ const CustomJobAd = ({
     }
   }, []);
   const [transition, setTransition] = useState("");
+
+  //navigate state
+  const router = useRouter();
+  const sendUserToAdPage = (id: string) => {
+    router.push(`/ads/${id}`, { scroll: false });
+  };
 
   function onClick() {
     if (!client) {
@@ -99,6 +106,7 @@ const CustomJobAd = ({
           title="Details"
           btnType="button"
           styles="bg-primary p-0 font-Rubik text-background hover:bg-primaryHover"
+          handleClick={() => sendUserToAdPage(id)}
         />
       </div>
     </div>
