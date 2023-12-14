@@ -33,6 +33,7 @@ export const sendDataToDatabase = async (
     newAd.save();
 
     revalidateTag("ads");
+    return newAd._id;
   } catch (error) {
     return {
       status: 500,
