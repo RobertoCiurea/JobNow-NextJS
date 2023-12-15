@@ -42,6 +42,7 @@ const ClientForm = ({
   //next auth session
   const session = useSession();
   const userEmail = session?.data?.user?.email;
+  const userImage = session?.data?.user?.image;
   //combomox filtered items
   const filteredPlaces =
     locationQuerry === ""
@@ -107,9 +108,8 @@ const ClientForm = ({
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
             <input
-              type="text"
+              type="number"
               name="salary"
-              pattern="[0-9]"
               placeholder="Add a salary (in &euro;)"
               required
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
@@ -141,8 +141,9 @@ const ClientForm = ({
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
             <input
-              type="number"
+              type="text"
               name="phone"
+              pattern="[0-9]*"
               placeholder="Add a phone number..."
               className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
             />
@@ -153,6 +154,14 @@ const ClientForm = ({
               className="hidden"
               defaultValue={userEmail!}
             />
+            {/*hidden input for sending session owner profile image to /create-ad page*/}
+            <input
+              type="text"
+              name="profileImage"
+              className="hidden"
+              defaultValue={userImage!}
+            />
+
             {/*Category Combobox */}
             <Combobox value={selectedCategory} onChange={setSelectedCategory}>
               <Combobox.Input
@@ -162,7 +171,7 @@ const ClientForm = ({
                 name="category"
                 className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
               />
-              <Combobox.Options className="z-10 bg-lighter p-8 rounded-3xl flex mx-5 flex-wrap overflow-y-auto h-80 gap-5">
+              <Combobox.Options className="bg-lighter p-5 rounded-xl h-80 flex flex-col min-h-10 max-h-64 gap-5 flex-grow overflow-y-auto">
                 {filteredCategory.length > 0 ? (
                   filteredCategory.map((category) => (
                     <Combobox.Option
@@ -188,7 +197,7 @@ const ClientForm = ({
                 required
                 className="p-3 focus:outline-none  outline-none focus:border-2 focus:border-primary  bg-lighter rounded-xl font-Manrope shadow-xl"
               />
-              <Combobox.Options className="z-10 bg-lighter p-8 rounded-3xl flex mx-5 flex-wrap overflow-y-auto h-80 gap-5">
+              <Combobox.Options className="bg-lighter p-5 rounded-xl h-80 flex flex-col min-h-10 max-h-64 gap-5 flex-grow overflow-y-auto">
                 {filteredPlaces?.length > 0 ? (
                   filteredPlaces.map((place: any) => (
                     <Combobox.Option
