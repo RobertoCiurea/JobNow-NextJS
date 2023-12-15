@@ -109,6 +109,15 @@ const AdContent = ({ adId }) => {
           </div>
           {/*Contact card */}
           <div className="flex flex-col gap-5 justify-center border-4 border-gray p-3 rounded-xl shadow-xl">
+            <div className="w-full flex justify-center items-center">
+              <Image
+                src={ad.profileImage}
+                alt="Image Banner"
+                width={100}
+                height={100}
+                className="rounded-full"
+              />
+            </div>
             <h1 className="font-Rubik font-bold text-xl mx-auto">
               {ad.company}
             </h1>
