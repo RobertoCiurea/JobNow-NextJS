@@ -29,6 +29,7 @@ export interface RefProps {
 export interface AdsProps extends Document {
   _id: mongoose.Types.ObjectId | string;
   owner: string;
+  profileImage: string;
   title: string;
   tags?: string[];
   salary: number;
@@ -73,6 +74,7 @@ export interface Ads {
   email: string;
   location: string;
   owner: string;
+  profileImage: string;
   phone: number | string;
   salary: number;
   tags?: string[];

@@ -38,6 +38,7 @@ const getAdById = async (id: string) => {
       salary: ad.salary,
       company: ad.company,
       owner: ad.owner,
+      profileImage: ad.profileImage,
       description: ad.description,
       email: ad.email,
       phone: ad.phone,

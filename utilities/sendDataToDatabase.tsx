@@ -21,6 +21,7 @@ export const sendDataToDatabase = async (
       salary: formData.get("salary"),
       company: formData.get("company"),
       owner: formData.get("owner"),
+      profileImage: formData.get("profileImage"),
       description: formData.get("description"),
       email: formData.get("email"),
       phone: formData.get("phone"),
