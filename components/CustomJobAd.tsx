@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import { CustomJobAdProps } from "@/types";
 import { CustomButton } from "@/components/index";
@@ -9,6 +9,8 @@ import HeartFocused from "@/public/icons/Heart-focused.svg";
 import { useRouter } from "next/navigation";
 //add ads to favourites list
 import { addToFavorite } from "@/utilities/addToFavorite";
+//notification context
+import { NotificationContext } from "@/app/page";
 const CustomJobAd = ({
   date,
   title,
@@ -37,11 +39,13 @@ const CustomJobAd = ({
   const sendUserToAdPage = (id: string) => {
     router.push(`/ads/${id}`, { scroll: false });
   };
+  //notification context state
+  const { notification, setNotification } = useContext(NotificationContext);
 
   function onClick() {
     if (!client) {
-      //replace with custom notification later toastify
-      alert("You have to be logged in to add tp favorites");
+      setNotification(true);
+      // alert("You have to be logged in to add tp favorites");
     } else {
       setFocused((prevFocused: boolean) => !prevFocused);
       console.log(focused);

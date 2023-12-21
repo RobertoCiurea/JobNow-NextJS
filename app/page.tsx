@@ -9,10 +9,14 @@ import Spinner from "@/public/icons/spinner.svg";
 import { Ads } from "@/types";
 //useSession from next-auth
 import { useSession } from "next-auth/react";
+//toastify notifications
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //set the context provider
 export const SortContext = createContext(null);
 export const FilterContext = createContext(null);
+export const NotificationContext = createContext(null);
 
 const Home = () => {
   const [jobAds, setJobAds] = useState<any>([]);
@@ -26,6 +30,8 @@ const Home = () => {
   const [salaryRange, setSalaryRange] = useState([0, 25000]);
   const [jobLocation, setJobLocation] = useState<String>("");
 
+  //unlogged user notification system
+  const [notification, setNotification] = useState(false);
   //fetch data from database
   const getAds = async () => {
     const data = await getDataFromDatabase();
@@ -41,6 +47,10 @@ const Home = () => {
     jobLocation: String;
     setJobLocation: React.Dispatch<React.SetStateAction<String>>;
   };
+  type NotificationContextType = {
+    notification: Boolean;
+    setNotification: React.Dispatch<React.SetStateAction<Boolean>>;
+  };
   //unite sort and setSort into an object to pass to context provider
   const sortContextValue: SortContextType = {
     sort,
@@ -53,6 +63,10 @@ const Home = () => {
     jobLocation,
     setJobLocation,
   };
+  const notificationContextValue: NotificationContextType = {
+    notification,
+    setNotification,
+  };
   // console.log(filterContextValue);
 
   useEffect(() => {
@@ -60,7 +74,23 @@ const Home = () => {
       setJobAds(response);
     });
   }, []);
+  console.log(notification);
   //console.log(jobAds);
+  //notifications from toastify
+  if (notification) {
+    toast.error("You must be logged in to add to favorites!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setNotification(false);
+  }
+
   //sort ads to newst to oldest
   if (sort === "oldest")
     //dateF - firts date
@@ -92,6 +122,18 @@ const Home = () => {
   // console.log(jobAds);
   return (
     <main className="w-full ">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Hero scrollRef={scrollRef} />
       {/*Send sort and setSort to be modified from child component by select tag and sort ads array by them */}
       <SortContext.Provider value={sortContextValue}>
@@ -108,40 +150,42 @@ const Home = () => {
             width={100}
           />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
-            {jobAds.length > 0 &&
-              jobAds.map((ad: Ads, index: number) => {
-                const meetsSalaryCriteria =
-                  ad.salary >= salaryRange[0] && ad.salary <= salaryRange[1];
+          <NotificationContext.Provider value={notificationContextValue}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
+              {jobAds.length > 0 &&
+                jobAds.map((ad: Ads, index: number) => {
+                  const meetsSalaryCriteria =
+                    ad.salary >= salaryRange[0] && ad.salary <= salaryRange[1];
 
-                const meetsLocationCriteria = jobLocation
-                  ? ad.location === jobLocation
-                  : true; // If jobLocation is empty, consider it as meeting the location criteria
+                  const meetsLocationCriteria = jobLocation
+                    ? ad.location === jobLocation
+                    : true; // If jobLocation is empty, consider it as meeting the location criteria
 
-                if (meetsSalaryCriteria && meetsLocationCriteria) {
-                  return (
-                    <CustomJobAd
-                      date={ad.date}
-                      title={ad.title}
-                      tags={ad.tags}
-                      salary={ad.salary}
-                      location={ad.location}
-                      category={ad.category}
-                      company={ad.company}
-                      phone={ad.phone}
-                      description={ad.description}
-                      email={ad.email}
-                      id={ad._id}
-                      client={userEmail}
-                      favorites={ad.favorites}
-                      key={index}
-                    />
-                  );
-                }
+                  if (meetsSalaryCriteria && meetsLocationCriteria) {
+                    return (
+                      <CustomJobAd
+                        date={ad.date}
+                        title={ad.title}
+                        tags={ad.tags}
+                        salary={ad.salary}
+                        location={ad.location}
+                        category={ad.category}
+                        company={ad.company}
+                        phone={ad.phone}
+                        description={ad.description}
+                        email={ad.email}
+                        id={ad._id}
+                        client={userEmail}
+                        favorites={ad.favorites}
+                        key={index}
+                      />
+                    );
+                  }
 
-                return null;
-              })}
-          </div>
+                  return null;
+                })}
+            </div>
+          </NotificationContext.Provider>
         )}
       </SortContext.Provider>
     </main>
