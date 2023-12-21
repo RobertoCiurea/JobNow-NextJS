@@ -56,11 +56,7 @@ const getAdById = async (id: string) => {
     // console.log(simplifiedAd);
     return simplifiedAd;
   } catch (error) {
-    return {
-      status: 500,
-      body: { messsage: "An error occurred while searching for ads" },
-      error: error.message,
-    };
+    return error;
   }
 };
 
