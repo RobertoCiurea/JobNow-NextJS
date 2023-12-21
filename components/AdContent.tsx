@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import getAdById from "@/utilities/getAdById";
+//add ad to favorites server function
+import { addToFavorite } from "@/utilities/addToFavorite";
 //icons svg from icons folder
 import HeartIconFocused from "@/public/icons/heart-gray.svg";
 import HeartIconNeutral from "@/public/icons/heart-neutral.svg";
@@ -9,9 +11,20 @@ import Clock from "@/public/icons/clock.svg";
 import Hashtag from "@/public/icons/hashtag.svg";
 import Spinner from "@/public/icons/spinner.svg";
 import Clipboard from "@/public/icons/clipboard.svg";
+import Edit from "@/public/icons/edit.svg";
+import Delete from "@/public/icons/delete.svg";
 import Image from "next/image";
+//Custom Button
+import { CustomButton } from "@/components/index";
+//session from next auth
+import { useSession } from "next-auth/react";
+//toastify notifications
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdContent = ({ adId }) => {
+  const session = useSession();
+  const userEmail = session.data?.user.email;
   const [ad, setAd] = useState<any>({});
   const [favorite, setFavorite] = useState(false);
   // console.log("The id from component is " + adId);
@@ -23,25 +36,54 @@ const AdContent = ({ adId }) => {
   const buttonStyles = favorite ? "bg-primaryHover" : "bg-primary";
   const textStyle = favorite ? "text-light" : "text-white";
   const [loading, setLoading] = useState(true);
-  const modifyFavoriteState = () => {
-    setFavorite((currentState) => !currentState);
+  const onClick = () => {
+    if (userEmail) {
+      setFavorite((currentState) => !currentState);
+      addToFavorite(ad._id, favorite, userEmail);
+    } else {
+      toast.error("You must be logged in to add to favorites!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   useEffect(() => {
     getAds().then((response) => {
       setAd(response);
       setLoading(false);
-      // console.log(response);
+      console.log(response);
+      if (response.favorites && response.favorites.includes(userEmail))
+        setFavorite(true);
     });
-  }, []);
+  }, [adId, userEmail]);
   //tag types
   type tag = {
     title: string;
     _id: string;
   };
+
   if (!loading)
     return (
       <>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         {/*outter conetnt */}
         <div className="flex flex-col px-5 items-center justify-center gap-10 md:gap-28 md:flex-row my-10">
           {/*Left section */}
@@ -106,6 +148,27 @@ const AdContent = ({ adId }) => {
               </h1>
               <p className="font-Manrope">{ad.description}</p>
             </div>
+            {/*Edit and delete butons section */}
+            {userEmail === ad.owner && (
+              <section className="flex justify-between my-4">
+                <CustomButton
+                  title={"Edit"}
+                  btnType={"button"}
+                  styles="bg-lighter border-2 border-green-600 shadow-lg font-Rubik text-lg font-semibold transition flex justify-center gap-2 items-center hover:bg-light hover:border-green-700 hover:shadow-xl"
+                  src={Edit}
+                  width={20}
+                  height={20}
+                />
+                <CustomButton
+                  title={"Delete"}
+                  btnType={"button"}
+                  styles="bg-lighter border-2 border-red-600 shadow-lg font-Rubik text-lg font-semibold transition flex justify-center gap-2 items-center hover:bg-light hover:border-red-700 hover:shadow-xl"
+                  src={Delete}
+                  width={28}
+                  height={28}
+                />
+              </section>
+            )}
           </div>
           {/*Contact card */}
           <div className="flex flex-col gap-5 justify-center border-4 border-gray p-3 rounded-xl shadow-xl">
@@ -128,7 +191,7 @@ const AdContent = ({ adId }) => {
               </h1>
               <button
                 className="transition-transform hover:-translate-y-1 "
-                onClick={() => navigator.clipboard.writeText(ad.phone)}
+                onClick={() => navigator.clipboard.writeText(ad.email)}
               >
                 <Image src={Clipboard} alt="Copy" width={25} />
               </button>
@@ -145,20 +208,14 @@ const AdContent = ({ adId }) => {
                 <Image src={Clipboard} alt="Copy" width={22} />
               </button>
             </div>
-            <button
-              className={`flex justify-evenly items-center ${buttonStyles} p-2 rounded-2xl hover:bg-primaryHover`}
-              onClick={modifyFavoriteState}
-            >
-              <h1 className={`font-Rubik text-lg ${textStyle}`}>
-                Save to favorites
-              </h1>
-              <Image
-                src={favorite ? HeartIconFocused : HeartIconNeutral}
-                alt="Add to favorite"
-                width={30}
-                className="-ml-2"
-              />
-            </button>
+            <CustomButton
+              title={"Save to favorites"}
+              btnType={"button"}
+              styles={`flex justify-evenly items-center ${buttonStyles} p-2 rounded-2xl hover:bg-primaryHover font-Rubik text-lg ${textStyle}`}
+              src={favorite ? HeartIconFocused : HeartIconNeutral}
+              width={30}
+              handleClick={onClick}
+            />
           </div>
         </div>
       </>
