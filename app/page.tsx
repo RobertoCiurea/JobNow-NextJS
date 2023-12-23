@@ -17,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const SortContext = createContext(null);
 export const FilterContext = createContext(null);
 export const NotificationContext = createContext(null);
+export const SearchContext = createContext(null);
 
 const Home = () => {
   const [jobAds, setJobAds] = useState<any>([]);
@@ -51,6 +52,7 @@ const Home = () => {
     notification: Boolean;
     setNotification: React.Dispatch<React.SetStateAction<Boolean>>;
   };
+
   //unite sort and setSort into an object to pass to context provider
   const sortContextValue: SortContextType = {
     sort,
@@ -63,10 +65,24 @@ const Home = () => {
     jobLocation,
     setJobLocation,
   };
+  //unite notification states for context provider
   const notificationContextValue: NotificationContextType = {
     notification,
     setNotification,
   };
+  //search state for filtering the ads
+  const [search, setSearch] = useState<String>("");
+  // console.log(search);
+  //filter the ads by the search querry state
+  const filteredAds =
+    search === ""
+      ? jobAds
+      : jobAds.filter((ad) => {
+          return ad.category.toLowerCase().includes(search.toLowerCase());
+        });
+
+  // console.log(filteredAds);
+
   // console.log(filterContextValue);
 
   useEffect(() => {
@@ -74,7 +90,7 @@ const Home = () => {
       setJobAds(response);
     });
   }, []);
-  console.log(notification);
+
   //console.log(jobAds);
   //notifications from toastify
   if (notification) {
@@ -136,58 +152,66 @@ const Home = () => {
       />
       <Hero scrollRef={scrollRef} />
       {/*Send sort and setSort to be modified from child component by select tag and sort ads array by them */}
-      <SortContext.Provider value={sortContextValue}>
-        <Main scrollRef={scrollRef} modalRef={modalRef} />
-        <FilterContext.Provider value={filterContextValue}>
-          <Modal modalRef={modalRef} />
-        </FilterContext.Provider>
-        {/*Job ads are showing as a grid */}
-        {jobAds.length === 0 ? (
-          <Image
-            src={Spinner}
-            alt="Loading..."
-            className="animate-spin flex mx-auto my-10"
-            width={100}
-          />
-        ) : (
-          <NotificationContext.Provider value={notificationContextValue}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
-              {jobAds.length > 0 &&
-                jobAds.map((ad: Ads, index: number) => {
-                  const meetsSalaryCriteria =
-                    ad.salary >= salaryRange[0] && ad.salary <= salaryRange[1];
+      <SearchContext.Provider value={[search, setSearch]}>
+        <SortContext.Provider value={sortContextValue}>
+          <Main scrollRef={scrollRef} modalRef={modalRef} />
+          <FilterContext.Provider value={filterContextValue}>
+            <Modal modalRef={modalRef} />
+          </FilterContext.Provider>
+          {/*Job ads are showing as a grid */}
+          {jobAds.length === 0 ? (
+            <Image
+              src={Spinner}
+              alt="Loading..."
+              className="animate-spin flex mx-auto my-10"
+              width={100}
+            />
+          ) : (
+            <NotificationContext.Provider value={notificationContextValue}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 m lg:grid-cols-3 2xl:grid-cols-4 gap-20 px-20">
+                {jobAds.length > 0 && filteredAds.length > 0 ? (
+                  filteredAds.map((ad: Ads, index: number) => {
+                    const meetsSalaryCriteria =
+                      ad.salary >= salaryRange[0] &&
+                      ad.salary <= salaryRange[1];
 
-                  const meetsLocationCriteria = jobLocation
-                    ? ad.location === jobLocation
-                    : true; // If jobLocation is empty, consider it as meeting the location criteria
+                    const meetsLocationCriteria = jobLocation
+                      ? ad.location === jobLocation
+                      : true; // If jobLocation is empty, consider it as meeting the location criteria
 
-                  if (meetsSalaryCriteria && meetsLocationCriteria) {
-                    return (
-                      <CustomJobAd
-                        date={ad.date}
-                        title={ad.title}
-                        tags={ad.tags}
-                        salary={ad.salary}
-                        location={ad.location}
-                        category={ad.category}
-                        company={ad.company}
-                        phone={ad.phone}
-                        description={ad.description}
-                        email={ad.email}
-                        id={ad._id}
-                        client={userEmail}
-                        favorites={ad.favorites}
-                        key={index}
-                      />
-                    );
-                  }
+                    if (meetsSalaryCriteria && meetsLocationCriteria) {
+                      return (
+                        <CustomJobAd
+                          date={ad.date}
+                          title={ad.title}
+                          tags={ad.tags}
+                          salary={ad.salary}
+                          location={ad.location}
+                          category={ad.category}
+                          company={ad.company}
+                          phone={ad.phone}
+                          description={ad.description}
+                          email={ad.email}
+                          id={ad._id}
+                          client={userEmail}
+                          favorites={ad.favorites}
+                          key={index}
+                        />
+                      );
+                    }
 
-                  return null;
-                })}
-            </div>
-          </NotificationContext.Provider>
-        )}
-      </SortContext.Provider>
+                    return null;
+                  })
+                ) : (
+                  <div className="mx-auto font-Rubik text-2xl">
+                    No ads found!
+                  </div>
+                )}
+              </div>
+            </NotificationContext.Provider>
+          )}
+        </SortContext.Provider>
+      </SearchContext.Provider>
     </main>
   );
 };

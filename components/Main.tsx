@@ -69,7 +69,7 @@ const Main = ({ scrollRef, modalRef }: RefProps) => {
       <div className="flex  flex-col items-center sm:flex-row gap-5 sm:gap-20 px-10 ">
         {/*Search section */}
         <SearchBar
-          placeholder="Search for jobs..."
+          placeholder="Search by job category..."
           imageSource={SearchIcon}
           type="text"
           inputStyles="bg-lighter font-Manrope rounded-full placeholder:text-black focus:outline focus:outline-primary pr-16 "
