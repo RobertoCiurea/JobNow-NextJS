@@ -1,8 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import getAdById from "@/utilities/getAdById";
 //add ad to favorites server function
 import { addToFavorite } from "@/utilities/addToFavorite";
+//delete ad from databse
+import { deleteAd } from "@/utilities/deleteAd";
+//redirect context from ad page
+import { RedirectContext } from "@/app/ads/[id]/page";
 //icons svg from icons folder
 import HeartIconFocused from "@/public/icons/heart-gray.svg";
 import HeartIconNeutral from "@/public/icons/heart-neutral.svg";
@@ -18,6 +22,7 @@ import Image from "next/image";
 import { CustomButton } from "@/components/index";
 //session from next auth
 import { useSession } from "next-auth/react";
+
 //toastify notifications
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -69,7 +74,29 @@ const AdContent = ({ adId }) => {
     _id: string;
   };
 
-  if (!loading)
+  //refs
+  const modalRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  //open dialog function
+  const openModal = () => {
+    if (!isModalOpen) {
+      modalRef.current.show();
+      setIsModalOpen(true);
+    } else closeModal();
+  };
+  const closeModal = () => {
+    modalRef.current.close();
+    setIsModalOpen(false);
+  };
+  const modalOpenStyle = isModalOpen ? "flex" : "hidden";
+  //delete ad ad redirect to home page
+  const [setRedirected] = useContext(RedirectContext);
+  const deleteAdAndRedirectUser = async (id: string) => {
+    await setRedirected(true);
+    deleteAd(id);
+  };
+
+  if (!loading && ad)
     return (
       <>
         <ToastContainer
@@ -141,6 +168,7 @@ const AdContent = ({ adId }) => {
                 </div>
               )}
             </div>
+
             {/*Description */}
             <div className="p-3 flex flex-col">
               <h1 className="font-Rubik font-semibold text-lg text-light">
@@ -148,6 +176,30 @@ const AdContent = ({ adId }) => {
               </h1>
               <p className="font-Manrope">{ad.description}</p>
             </div>
+            {/*Modal for deleting the ad */}
+            <dialog
+              className={`${modalOpenStyle} flex-col  justify-center z-10 shadow-xl mx-7 sm:mx-auto`}
+              ref={modalRef}
+            >
+              <h1 className="font-Rubik p-3 text-lg">
+                Are you sure you want to detele the ad with ID:{" "}
+                <span className="font-bold">{ad._id}</span>
+              </h1>
+              <div className="flex justify-around py-3 mx-20">
+                <CustomButton
+                  title="Yes"
+                  btnType="button"
+                  styles="bg-primary text-white"
+                  handleClick={() => deleteAdAndRedirectUser(ad._id)}
+                />
+                <CustomButton
+                  title="No"
+                  btnType="button"
+                  styles="bg-red-600 text-white"
+                  handleClick={closeModal}
+                />
+              </div>
+            </dialog>
             {/*Edit and delete butons section */}
             {userEmail === ad.owner && (
               <section className="flex justify-between my-4">
@@ -166,6 +218,7 @@ const AdContent = ({ adId }) => {
                   src={Delete}
                   width={28}
                   height={28}
+                  handleClick={openModal}
                 />
               </section>
             )}
