@@ -40,15 +40,14 @@ const CustomJobAd = ({
     router.push(`/ads/${id}`, { scroll: false });
   };
   //notification context state
-  const { notification, setNotification } = useContext(NotificationContext);
-
+  const { setNotification } = useContext(NotificationContext);
   function onClick() {
     if (!client) {
-      setNotification(true);
       // alert("You have to be logged in to add tp favorites");
+      setNotification(true);
     } else {
       setFocused((prevFocused: boolean) => !prevFocused);
-      console.log(focused);
+      // console.log(focused);
       addToFavorite(id, focused, client);
       setTransition("transiton-all opacity-80 animate-bounce ");
       setInterval(() => {
