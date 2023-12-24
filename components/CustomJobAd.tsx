@@ -40,7 +40,8 @@ const CustomJobAd = ({
     router.push(`/ads/${id}`, { scroll: false });
   };
   //notification context state
-  const { setNotification } = useContext(NotificationContext);
+  const context = useContext(NotificationContext);
+  const setNotification = context ? context.setNotification : () => {};
   function onClick() {
     if (!client) {
       // alert("You have to be logged in to add tp favorites");
